@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"abel.special3/general/encode"
 	"bytes"
+	"github.com/abelwei/abel.special3/general/encode"
 	"github.com/sirupsen/logrus"
 	"os/exec"
 )
