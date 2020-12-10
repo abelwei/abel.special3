@@ -143,6 +143,33 @@ func dcopy(srcdir, destdir string, info os.FileInfo) error {
 	return nil
 }
 
+func dcopyNcovered(srcdir, destdir string, info os.FileInfo) error {
+
+	originalMode := info.Mode()
+
+	// Make dest dir with 0755 so that everything writable.
+	if err := os.MkdirAll(destdir, tmpPermissionForDirectory); err != nil {
+		return err
+	}
+	// Recover dir mode with original one.
+	defer os.Chmod(destdir, originalMode)
+
+	contents, err := ioutil.ReadDir(srcdir)
+	if err != nil {
+		return err
+	}
+
+	for _, content := range contents {
+		cs, cd := filepath.Join(srcdir, content.Name()), filepath.Join(destdir, content.Name())
+		if err := copyNcovered(cs, cd, content); err != nil {
+			// If any error, exit immediately
+			return err
+		}
+	}
+
+	return nil
+}
+
 // lcopy is for a symlink,
 // with just creating a new symlink by replicating src symlink.
 func lcopy(src, dest string, info os.FileInfo) error {
