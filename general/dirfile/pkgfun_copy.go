@@ -49,7 +49,7 @@ func copyNcovered(src, dest string, info os.FileInfo) error {
 		return lcopy(src, dest, info)
 	}
 	if info.IsDir() {
-		return dcopy(src, dest, info)
+		return dcopyNcovered(src, dest, info)
 	}
 	return fcopyNcovered(src, dest, info)
 }
