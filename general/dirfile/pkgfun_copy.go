@@ -23,6 +23,14 @@ func Copy(src, dest string) error {
 	return copy(src, dest, info)
 }
 
+func CopyNcovered(src, dest string) error {
+	info, err := os.Lstat(src)
+	if err != nil {
+		return err
+	}
+	return copyNcovered(src, dest, info)
+}
+
 // copy dispatches copy-funcs according to the mode.
 // Because this "copy" could be called recursively,
 // "info" MUST be given here, NOT nil.
@@ -34,6 +42,16 @@ func copy(src, dest string, info os.FileInfo) error {
 		return dcopy(src, dest, info)
 	}
 	return fcopy(src, dest, info)
+}
+
+func copyNcovered(src, dest string, info os.FileInfo) error {
+	if info.Mode()&os.ModeSymlink != 0 {
+		return lcopy(src, dest, info)
+	}
+	if info.IsDir() {
+		return dcopy(src, dest, info)
+	}
+	return fcopyNcovered(src, dest, info)
 }
 
 // fcopy is for just a file,
@@ -63,6 +81,36 @@ func fcopy(src, dest string, info os.FileInfo) error {
 
 	_, err = io.Copy(f, s)
 	return err
+}
+
+func fcopyNcovered(src, dest string, info os.FileInfo) error {
+
+	if FileExist(dest) == false {
+		if err := os.MkdirAll(filepath.Dir(dest), os.ModePerm); err != nil {
+			return err
+		}
+
+		f, err := os.Create(dest)
+		if err != nil {
+			return err
+		}
+		defer f.Close()
+
+		if err = os.Chmod(f.Name(), info.Mode()); err != nil {
+			return err
+		}
+
+		s, err := os.Open(src)
+		if err != nil {
+			return err
+		}
+		defer s.Close()
+
+		_, err = io.Copy(f, s)
+		return err
+	}
+
+	return nil
 }
 
 // dcopy is for a directory,
