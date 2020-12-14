@@ -4,7 +4,9 @@ import (
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/pkg/errors"
 	"github.com/rifflock/lfshook"
+	"github.com/shiena/ansicolor"
 	"github.com/sirupsen/logrus"
+	"os"
 	"path"
 	"time"
 )
@@ -29,4 +31,11 @@ func ConfigLocalFilesystemLogger(logPath string, logFileName string, maxAge time
 		logrus.PanicLevel: writer,
 	}, &logrus.TextFormatter{})
 	logrus.AddHook(lfHook)
+}
+
+func SetLogrusCoutColor() {
+	logrus.SetFormatter(&logrus.TextFormatter{
+		ForceColors:true,
+	})
+	logrus.SetOutput(ansicolor.NewAnsiColorWriter(os.Stdout))
 }
