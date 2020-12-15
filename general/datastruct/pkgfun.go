@@ -1,7 +1,9 @@
 package datastruct
 
 import (
+	"bytes"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"gopkg.in/yaml.v2"
 )
 
@@ -33,4 +35,12 @@ func MapMerge(source, add map[interface{}]interface{}) map[interface{}]interface
 		source[k] = v
 	}
 	return source
+}
+
+
+func SettingTxt2Map(txt, format string) map[string]interface{} {
+	var vpr = viper.New()
+	vpr.SetConfigType(format)
+	vpr.ReadConfig(bytes.NewBuffer([]byte(txt)))
+	return vpr.AllSettings()
 }
