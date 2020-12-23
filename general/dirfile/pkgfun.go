@@ -120,24 +120,6 @@ func MkdirAll(dir string) bool {
 }
 
 
-func Template2Text(textTmpl string, srtDefault interface{}) (err error, rst string) {
-	if textTmpl == "" {
-		return errors.New("textTmpl is empty"), ""
-	}
-	tempCode, err := template.New("create").Parse(textTmpl)
-	if err != nil {
-		logrus.Error("template.create error:", err)
-		return
-	}
-	tempBuf := new(bytes.Buffer)
-	err = tempCode.Execute(tempBuf, srtDefault)
-	if err != nil {
-		logrus.Error("template.Execute error:",err)
-		return
-	}
-	rst = tempBuf.String()
-	return
-}
 
 func GetFileNameExt(filePath string) (filenameFull, filenameOnly, fileExt string) {
 	filenameFull = path.Base(filePath)
