@@ -1,8 +1,6 @@
 package dirfile
 
 import (
-	"bytes"
-	"errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/afero"
 	"io/ioutil"
@@ -10,7 +8,6 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
-	"text/template"
 )
 
 func GetCurrentDirectory() string {
