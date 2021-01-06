@@ -17,6 +17,17 @@ func Yml2Map(text string) map[interface{}]interface{} {
 	return mapYml
 }
 
+//用于ymal数组形式
+func Yml2MapSlice(text string) []map[interface{}]interface{} {
+	mapYml := []map[interface{}]interface{}{}
+	bText := []byte(text)
+	err := yaml.Unmarshal(bText,&mapYml)
+	if err != nil {
+		logrus.Error(err)
+	}
+	return mapYml
+}
+
 
 func Map2Yml(mpaz map[interface{}]interface{}) string {
 	//txtYml := ""
