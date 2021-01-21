@@ -33,6 +33,33 @@ func FirstToUpper(str string) string {
 	return string(strArry)
 }
 
+
+//将首字母变成小写
+func Lowercase(str string) (rst string) {
+	if len(str) < 1 {
+		return
+	}
+	strArry := []rune(str)
+	if strArry[0] >= 65 && strArry[0] <= 90  {
+		strArry[0] +=  32
+	}
+	rst = string(strArry)
+	return
+}
+
+//将首字母变成大写
+func Capitalize(str string) (rst string) {
+	if len(str) < 1 {
+		return
+	}
+	strArry := []rune(str)
+	if strArry[0] >= 97 && strArry[0] <= 122  {
+		strArry[0] -=  32
+	}
+	rst = string(strArry)
+	return
+}
+
 //下划线转驼峰
 func Case2Camel(caseChar string) string {
 	camelChar := strings.Replace(caseChar, "_", " ", -1)
