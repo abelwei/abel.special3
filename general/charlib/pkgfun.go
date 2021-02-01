@@ -122,3 +122,22 @@ func Template2Text(textTmpl string, srtDefault interface{}) (err error, rst stri
 	rst = tempBuf.String()
 	return
 }
+
+func Template2TextWithFunc(tempCode string, srtDefault interface{}, funcs map[string]interface{}) (err error, rst string) {
+	if tempCode == "" {
+		return errors.New("tempCode is empty"), ""
+	}
+	paser, err := template.New("create").Funcs(funcs).Parse(tempCode)
+	if err != nil {
+		logrus.Error("template.create error:", err)
+		return
+	}
+	tempBuf := new(bytes.Buffer)
+	err = paser.Execute(tempBuf, srtDefault)
+	if err != nil {
+		logrus.Error("template.Execute error:",err)
+		return
+	}
+	rst = tempBuf.String()
+	return
+}
