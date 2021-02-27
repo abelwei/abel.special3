@@ -1,8 +1,10 @@
 package dirfile
 
 import (
+	"bufio"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/afero"
+	"io"
 	"io/ioutil"
 	"os"
 	"path"
@@ -141,4 +143,26 @@ func GetFileExt(filePath string) string {
 func GetFileNameOnly(filePath string) string {
 	_, str,_ := GetFileNameExt(filePath)
 	return str
+}
+
+func ReadfileLine(filePath string) (rstss []string) {
+	fi, err := os.Open(filePath)
+	if err != nil {
+		logrus.Errorf("dirfile.ReadfileLine Error: %s", err.Error())
+		return
+	}
+	defer fi.Close()
+
+	br := bufio.NewReader(fi)
+	for {
+		line, _, err2 := br.ReadLine()
+		if err2 != nil {
+			if err2 != io.EOF { //如果不是读取到文本尽头的错误是非常规错误
+				logrus.Errorf("dirfile.ReadfileLine Error2: %s", err2.Error())
+			}
+			break
+		}
+		rstss = append(rstss, string(line))
+	}
+	return
 }
