@@ -48,6 +48,17 @@ func (self *Requests) SetHeader(sKey, sValue string) {
 	self.hearders[sKey] = sValue
 }
 
+func (self *Requests) SetContentType(val string) {
+	self.hearders["Content-Type"] = val
+}
+
+func (self *Requests) addHeader(request *http.Request){
+	for key, val := range self.hearders {
+		request.Header.Set(key, val)
+	}
+}
+
+
 func (self *Requests) handle(method, url string, postVal url.Values) (strHtml string, err error) {
 	var (
 		postData *strings.Reader
@@ -60,7 +71,15 @@ func (self *Requests) handle(method, url string, postVal url.Values) (strHtml st
 	}else{
 		postData = strings.NewReader(postVal.Encode())
 		request, errRequest = http.NewRequest(method, url, postData)
+
 	}
+	if method == "POST" {
+		if _, ok := self.hearders["Content-Type"]; !ok {
+			self.hearders["Content-Type"] = "application/x-www-form-urlencoded"
+		}
+	}
+
+	self.addHeader(request)
 	//logrus.Info(postVal.Encode()) //将Values转为aa=bb&cc=dd这样格式的字符串
 	if errRequest == nil {
 		//self.setDefaultMapHeader()
