@@ -1,6 +1,7 @@
 package dirfile
 
 import (
+	"github.com/keepeye/logrus-filename"
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/pkg/errors"
 	"github.com/rifflock/lfshook"
@@ -38,4 +39,10 @@ func SetLogrusCoutColor() {
 		ForceColors:true,
 	})
 	logrus.SetOutput(ansicolor.NewAnsiColorWriter(os.Stdout))
+}
+
+func SetLogrusLine() {
+	filenameHook := filename.NewHook()
+	filenameHook.Field = "line"
+	logrus.AddHook(filenameHook)
 }
