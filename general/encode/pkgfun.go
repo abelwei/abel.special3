@@ -2,7 +2,9 @@ package encode
 
 import (
 	"bytes"
+	"crypto/md5"
 	"encoding/base64"
+	"encoding/hex"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
@@ -54,4 +56,10 @@ func Base64(str string, isStr2Base64 bool) string {
 		result = string(decodeBytes)
 	}
 	return result
+}
+
+func Md5(str string)string{
+	md := md5.New()
+	md.Write([]byte(str))
+	return hex.EncodeToString(md.Sum(nil))
 }
