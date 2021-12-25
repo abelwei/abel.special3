@@ -55,7 +55,7 @@ func (self *Xhtml) Parse2Sli(sRule string, bHtml bool) []string {
 }
 
 type Url struct {
-	Link string
+	Link  string
 	Title string
 }
 
@@ -66,13 +66,13 @@ func (self *Xhtml) Parse2SliUrl(sRule string) []Url {
 	urlCount := len(sliUrl)
 	titleCount := len(sliTitle)
 	if urlCount == titleCount {
-		for i:=0; i < urlCount; i++ {
+		for i := 0; i < urlCount; i++ {
 			url := Url{}
 			url.Link = sliUrl[i]
 			url.Title = sliTitle[i]
 			reslut = append(reslut, url)
 		}
-	}else{
+	} else {
 		logrus.Fatal("url and title unequal")
 	}
 	return reslut
@@ -84,4 +84,3 @@ func (self *Xhtml) Parse2Url(sRule string) Url {
 	result.Title = self.Parse2Str(sRule+"/text()", false)
 	return result
 }
-

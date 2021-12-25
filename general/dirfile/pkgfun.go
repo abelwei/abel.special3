@@ -12,8 +12,19 @@ import (
 	"strings"
 )
 
+func GetFiles(dir string) (rtsFiles []string) {
+	files, err := ioutil.ReadDir(dir)
+	if err == nil {
+		for _, file := range files {
+			rtsFiles = append(rtsFiles, file.Name())
+		}
+		return rtsFiles
+	}
+	return nil
+}
+
 func GetCurrentDirectory() string {
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))  //返回绝对路径  filepath.Dir(os.Args[0])去除最后一个元素的路径
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0])) //返回绝对路径  filepath.Dir(os.Args[0])去除最后一个元素的路径
 	if err != nil {
 		logrus.Error(err)
 	}
@@ -22,12 +33,11 @@ func GetCurrentDirectory() string {
 
 func GetParentDirectory(currentDir string, lay int) string {
 	sLay := "/"
-	for i:=0; i < lay; i++ {
+	for i := 0; i < lay; i++ {
 		sLay = sLay + "../"
 	}
 	return path.Dir(currentDir + sLay)
 }
-
 
 func ReadFile(filename string) string {
 	data, err := ioutil.ReadFile(filename)
@@ -45,7 +55,7 @@ func WriteFile(filename, text string) bool {
 	err := ioutil.WriteFile(filename, bt, 0644)
 	if err == nil {
 		return true
-	}else{
+	} else {
 		logrus.Error(err)
 		return false
 	}
@@ -73,7 +83,7 @@ func DirExist(dir string) bool {
 	} else {
 		if os.IsNotExist(err) {
 			return false
-		}else{
+		} else {
 			logrus.Error(err)
 		}
 	}
@@ -88,7 +98,7 @@ func FileExist(path string) bool {
 	} else {
 		if os.IsNotExist(err) {
 			return false
-		}else{
+		} else {
 			logrus.Error(err)
 		}
 	}
@@ -98,7 +108,7 @@ func FileExist(path string) bool {
 func GetDir4Path(pathFile string) string {
 	if dir, err := filepath.Abs(filepath.Dir(pathFile)); err == nil {
 		return dir
-	}else{
+	} else {
 		logrus.Error(err)
 		return ""
 	}
@@ -107,18 +117,16 @@ func GetDir4Path(pathFile string) string {
 func MkdirAll(dir string) bool {
 	if PathExist(dir) == false {
 		var appFs = afero.NewOsFs()
-		if err := appFs.MkdirAll(dir, 0777); err == nil{
+		if err := appFs.MkdirAll(dir, 0777); err == nil {
 			return true
-		}else{
+		} else {
 			logrus.Error(err)
 			return false
 		}
-	}else{
+	} else {
 		return true
 	}
 }
-
-
 
 func GetFileNameExt(filePath string) (filenameFull, filenameOnly, fileExt string) {
 	filenameFull = path.Base(filePath)
@@ -133,7 +141,7 @@ func GetFileNameFull(filePath string) string {
 }
 
 func GetFileExt(filePath string) string {
-	_, _,str := GetFileNameExt(filePath)
+	_, _, str := GetFileNameExt(filePath)
 	if str != "" {
 		str = str[1:]
 	}
@@ -141,7 +149,7 @@ func GetFileExt(filePath string) string {
 }
 
 func GetFileNameOnly(filePath string) string {
-	_, str,_ := GetFileNameExt(filePath)
+	_, str, _ := GetFileNameExt(filePath)
 	return str
 }
 
