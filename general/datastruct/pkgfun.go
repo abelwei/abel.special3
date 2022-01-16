@@ -10,7 +10,7 @@ import (
 func Yml2Map(text string) map[interface{}]interface{} {
 	mapYml := make(map[interface{}]interface{})
 	bText := []byte(text)
-	err := yaml.Unmarshal(bText,&mapYml)
+	err := yaml.Unmarshal(bText, &mapYml)
 	if err != nil {
 		logrus.Error(err)
 	}
@@ -21,20 +21,19 @@ func Yml2Map(text string) map[interface{}]interface{} {
 func Yml2MapSlice(text string) []map[interface{}]interface{} {
 	mapYml := []map[interface{}]interface{}{}
 	bText := []byte(text)
-	err := yaml.Unmarshal(bText,&mapYml)
+	err := yaml.Unmarshal(bText, &mapYml)
 	if err != nil {
 		logrus.Error(err)
 	}
 	return mapYml
 }
 
-
 func Map2Yml(mpaz map[interface{}]interface{}) string {
 	//txtYml := ""
 	txtYml, err := yaml.Marshal(&mpaz)
-	if(err == nil){
+	if err == nil {
 		return string(txtYml)
-	}else{
+	} else {
 		logrus.Error(err)
 		return ""
 	}
@@ -47,7 +46,6 @@ func MapMerge(source, add map[interface{}]interface{}) map[interface{}]interface
 	}
 	return source
 }
-
 
 func SettingTxt2Map(txt, format string) map[string]interface{} {
 	var vpr = viper.New()
