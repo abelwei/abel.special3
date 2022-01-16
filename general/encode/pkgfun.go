@@ -9,7 +9,7 @@ import (
 	"io/ioutil"
 )
 
-func GbkToUtf8(s []byte) []byte{
+func GbkToUtf8(s []byte) []byte {
 	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
 	bRead, err := ioutil.ReadAll(reader)
 	if err != nil {
@@ -46,7 +46,7 @@ func Base64(str string, isStr2Base64 bool) string {
 	if isStr2Base64 {
 		input := []byte(str)
 		result = base64.StdEncoding.EncodeToString(input)
-	}else{
+	} else {
 		decodeBytes, err := base64.StdEncoding.DecodeString(str)
 		if err != nil {
 			logrus.Error(err)
